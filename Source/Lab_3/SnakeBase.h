@@ -59,4 +59,10 @@ public:
 
 	UFUNCTION()
 	void SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other);
+
+	UFUNCTION()
+	void TeleportSnake(FVector NewLocation);
+
+	UFUNCTION()
+	FVector GetLocationSnakeHead();
 };

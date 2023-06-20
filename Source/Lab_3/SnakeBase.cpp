@@ -106,3 +106,13 @@ void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActo
 	}
 }
 
+void ASnakeBase::TeleportSnake(FVector NewLocation)
+{
+	SnakeElements[0]->SetActorLocation(NewLocation);
+}
+
+FVector ASnakeBase::GetLocationSnakeHead()
+{
+	return SnakeElements[0]->GetActorLocation();
+}
+
