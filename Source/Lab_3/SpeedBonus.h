@@ -5,19 +5,19 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interactable.h"
-#include "Food.generated.h"
+#include "SpeedBonus.generated.h"
 
 UCLASS()
-class LAB_3_API AFood : public AActor, public IInteractable
+class LAB_3_API ASpeedBonus : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AFood();
+	ASpeedBonus();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 FoodPower;
+	float Power;
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,5 +28,4 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void Interact(AActor* Interactor, bool bIsHead) override;
-
 };

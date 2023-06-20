@@ -36,6 +36,9 @@ public:
 		float MovementSpeed;
 
 	UPROPERTY()
+		bool Moving = false;
+
+	UPROPERTY()
 		TArray<ASnakeElementBase*> SnakeElements;
 
 	UPROPERTY()

@@ -1,12 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Food.h"
+#include "SpeedBonus.h"
 #include "SnakeBase.h"
 
-
 // Sets default values
-AFood::AFood()
+ASpeedBonus::ASpeedBonus()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -14,28 +13,27 @@ AFood::AFood()
 }
 
 // Called when the game starts or when spawned
-void AFood::BeginPlay()
+void ASpeedBonus::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AFood::Tick(float DeltaTime)
+void ASpeedBonus::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void AFood::Interact(AActor* Interactor, bool bIsHead)
+void ASpeedBonus::Interact(AActor* Interactor, bool bIsHead)
 {
 	if (bIsHead)
 	{
 		auto Snake = Cast<ASnakeBase>(Interactor);
 		if (IsValid(Snake))
 		{
-			Snake->AddSnakeElement(FoodPower);
-			//Destroy();
+			Snake->SetActorTickInterval(Snake-> MovementSpeed -= Power);
 
 			int RandomX = FMath::RandRange(-600, 600);
 			RandomX = (RandomX / 100) * 100;
