@@ -10,23 +10,24 @@ ASnakeBase::ASnakeBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	ElementSize = 100.f;
-	MovementSpeed = 100.f;
-	LastMoveDirection = EMovementDirection::UP;
+	ElementSize = 120.f;
+	MovementSpeed = 0.5f;
+	LastMoveDirection = EMovementDirection::DOWN;
 }
 
 // Called when the game starts or when spawned
 void ASnakeBase::BeginPlay()
 {
 	Super::BeginPlay();
-	AddSnakeElement(4);
+	SetActorTickInterval(MovementSpeed);
+	AddSnakeElement(5);
 }
 
 // Called every frame
 void ASnakeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	Move(DeltaTime);
+	Move();
 }
 
 void ASnakeBase::AddSnakeElement(int ElementsNum)
@@ -36,15 +37,19 @@ void ASnakeBase::AddSnakeElement(int ElementsNum)
 		FVector NewLocation(SnakeElements.Num() * ElementSize, 0, 0);
 		FTransform NewTransform(NewLocation);
 		ASnakeElementBase* NewSnakeElement = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, NewTransform);
-		NewSnakeElement->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-		SnakeElements.Add(NewSnakeElement);
+		int32 ElementIndex = SnakeElements.Add(NewSnakeElement);
+		if (ElementIndex == 0)
+		{
+			NewSnakeElement->SetFirstElementType();
+		}
 	}
 }
 
-void ASnakeBase::Move(float DeltaTime)
+void ASnakeBase::Move()
 {
-	FVector MovementVector;
-	float MovementSpeedDelta = MovementSpeed * DeltaTime;
+	FVector MovementVector(FVector::ZeroVector);
+	float MovementSpeedDelta = ElementSize;
+
 
 	switch (LastMoveDirection)
 	{
@@ -60,10 +65,18 @@ void ASnakeBase::Move(float DeltaTime)
 	case EMovementDirection::RIGHT:
 		MovementVector.Y -= MovementSpeedDelta;
 		break;
-	default:
-		break;
 	}
 
-	AddActorWorldOffset(MovementVector);
+	//AddActorWorldOffset(MovementVector);
+
+	for (int i = SnakeElements.Num() - 1; i > 0 ; i--)
+	{
+		auto CurrentElement = SnakeElements[i];
+		auto PrevElement = SnakeElements[i - 1];
+		FVector PrevLocation = PrevElement->GetActorLocation();
+		CurrentElement->SetActorLocation(PrevLocation);
+	}
+
+	SnakeElements[0]->AddActorWorldOffset(MovementVector);
 }
 
